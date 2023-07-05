@@ -23,7 +23,10 @@ class BookList(View):
         return JsonResponse(data, safe=False, status=200)
 
     def post(self, request):
-        data = json.loads(request.body)
+        try:
+            data = json.loads(request.body)
+        except (ValueError, TypeError):
+            return JsonResponse({"error": "Invalid json"}, status=400)
         title = data.get("title")
         author_check = data.get('author')
         genre = data.get("genre")
@@ -92,8 +95,10 @@ class BookID(View):
             book = Book.objects.get(id=id)
         except Book.DoesNotExist:
             return JsonResponse({"error": "ID is not found"}, status=404)
-
-        data = json.loads(request.body)
+        try:
+            data = json.loads(request.body)
+        except (ValueError, TypeError):
+            return JsonResponse({"error": "Invalid json"}, status=400)
 
         title = data.get("title")
         author_check = data.get("author")
