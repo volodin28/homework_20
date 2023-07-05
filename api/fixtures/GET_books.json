@@ -1,15 +1,15 @@
 [
   {
     "id": 1,
-    "name": "book_1",
+    "title": "book_1",
     "author": "author_1",
     "genre": "genre_1",
     "publication_date": "2000-01-01"
   },
   {
     "id": 2,
-    "name": "book_2",
-    "authors": "author_2",
+    "title": "book_2",
+    "author": "author_2",
     "genre": "genre_2",
     "publication_date": "2000-01-01"
   }

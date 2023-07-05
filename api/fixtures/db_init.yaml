@@ -9,14 +9,14 @@
 - model: api.book
   pk: 1
   fields:
-    name: book_1
-    authors: author_1
+    title: book_1
+    author: 1
     genre: genre_1
     publication_date: 2000-01-01
 - model: api.book
   pk: 2
   fields:
-    name: book_2
-    authors: author_2
+    title: book_2
+    author: 2
     genre: genre_2
     publication_date: 2000-01-01
