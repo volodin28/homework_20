@@ -33,7 +33,7 @@ def test_post_books():
         "title": "Kobzar",
         "author": "Shevchenko",
         "genre": "drama",
-        "publication_date": "2020-01-01",
+        "publication_date": "2020-01-01"
     }
     json_data = json.dumps(data)
     response = c.post("/api/2/books", data=json_data, content_type="application/json")
@@ -43,7 +43,7 @@ def test_post_books():
         "title": "Kobzar",
         "author": "Shevchenko",
         "genre": "drama",
-        "publication_date": "2020-01-01",
+        "publication_date": "2020-01-01"
     }
     assert response.status_code == 201
     assert response_data == expected_response_data
@@ -135,7 +135,7 @@ def test_put_books_id():
         "title": "book_1",
         "author": "author_1",
         "genre": "drama",
-        "publication_date": "2000-01-01",
+        "publication_date": "2000-01-01"
     }
     assert response.status_code == 200
     assert response_data == expected_response_data
@@ -151,19 +151,54 @@ def test_get_books_e2e():
     assert r.status_code == 200
 
 
+@pytest.fixture
 def test_post_books_e2e():
     data = {
-        "title": "Kobzar",
-        "author": "Shevchenko",
-        "genre": "drama",
-        "publication_date": "2020-01-01",
+        "title": "test",
+        "author": "test",
+        "genre": "test",
+        "publication_date": "2020-01-01"
     }
     response = requests.post(BASE_URL + "books", json=data)
+    response_data = response.json()
+    test_book_id = response_data["id"]
+    expected_response_data = {
+        "id": test_book_id,
+        "title": "test",
+        "author": "test",
+        "genre": "test",
+        "publication_date": "2020-01-01"
+    }
     assert response.status_code == 201
+    assert response_data == expected_response_data
+    yield test_book_id
+    requests.delete(f"{BASE_URL}books/{test_book_id}")
 
 
-def test_get_book_id_e2e():
-    response = requests.get(BASE_URL + "books/1")
+def test_put_books_e2e(test_post_books_e2e):
+    data = {
+        "title": "new title"
+    }
+    response = requests.put(f"{BASE_URL}books/{test_post_books_e2e}", json=data)
+    response_data = response.json()
+    expected_response_data = {
+        "id": test_post_books_e2e,
+        "title": "new title",
+        "author": "test",
+        "genre": "test",
+        "publication_date": "2020-01-01"
+    }
+    assert response.status_code == 200
+    assert response_data == expected_response_data
+
+
+def test_delete_books_e2e(test_post_books_e2e):
+    response = requests.delete(f"{BASE_URL}books/{test_post_books_e2e}")
+    assert response.status_code == 200
+
+
+def test_get_book_id_e2e(test_post_books_e2e):
+    response = requests.get(f"{BASE_URL}books/{test_post_books_e2e}")
     assert response.status_code == 200
 
 
