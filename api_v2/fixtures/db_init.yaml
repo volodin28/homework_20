@@ -1,0 +1,22 @@
+- model: api_v2.author
+  pk: 1
+  fields:
+    name: author_1
+- model: api_v2.author
+  pk: 2
+  fields:
+    name: author_2
+- model: api_v2.book
+  pk: 1
+  fields:
+    title: book_1
+    author: 1
+    genre: genre_1
+    publication_date: 2000-01-01
+- model: api_v2.book
+  pk: 2
+  fields:
+    title: book_2
+    author: 2
+    genre: genre_2
+    publication_date: 2000-01-01

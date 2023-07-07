@@ -1,0 +1,204 @@
+openapi: 3.0.3
+info:
+  title: Library
+  description: Your books
+  version: 2.0.0
+servers:
+  - url: https://dashboard.heroku.com/apps/homework-20/api/2/
+tags:
+  - name: book
+  - name: author
+paths:
+  /books:
+    get:
+      tags:
+        - book
+      summary: List of books
+      description: Get all books
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookID'
+    post:
+      tags:
+        - book
+      summary: Add a book
+      requestBody:
+        description: Add a new book
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+        required: true
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error_400_POST_books'
+  /books/{id}:
+    get:
+      tags:
+        - book
+      summary: Get book by ID
+      parameters:
+        - name: id
+          in: path
+          description: Book's ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookID'
+        '404':
+          description: ID is not found
+    put:
+      tags:
+        - book
+      summary: Update book by ID
+      parameters:
+        - name: id
+          in: path
+          description: Book's ID
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Update a book
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Bad request
+        '404':
+          description: ID is not found
+    delete:
+      tags:
+        - book
+      summary: Delete book by id
+      description: Delete book by id
+      parameters:
+        - name: id
+          in: path
+          description: Book's ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The book has been deleted
+        '404':
+          description: ID is not found
+  /authors:
+    get:
+      tags:
+        - author
+      summary: List of authors
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+  /authors/{id}:
+    get:
+      tags:
+        - author
+      summary: Get author by ID
+      parameters:
+        - name: id
+          in: path
+          description: Author's ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Author'
+        '404':
+          description:  Author not found
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Book_1
+        author:
+          type: string
+          example: Author_1
+        genre:
+          type: string
+          example: Genre_1
+        publication_date:
+          type: string
+          format: date
+    BookID:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Book_1
+        author:
+          type: string
+          example: Author_1
+        genre:
+          type: string
+          example: Genre_1
+        publication_date:
+          type: string
+          format: date
+    Author:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Author_1
+    Error_400_POST_books:
+      type: object
+      properties:
+        author:
+          type: string
+          example: This field is required.
+        title:
+          type: string
+          example: This field is required.
+        genre:
+          type: string
+          example: This field is required.

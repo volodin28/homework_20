@@ -16,7 +16,7 @@ class BookList(View):
                 "title": book.title,
                 "author": book.author.name,
                 "genre": book.genre,
-                'publication_date': book.publication_date
+                "publication_date": book.publication_date,
             }
             for book in books
         ]
@@ -28,7 +28,7 @@ class BookList(View):
         except (ValueError, TypeError):
             return JsonResponse({"error": "Invalid json"}, status=400)
         title = data.get("title")
-        author_check = data.get('author')
+        author_check = data.get("author")
         genre = data.get("genre")
         publication_date = data.get("publication_date")
 
@@ -50,11 +50,15 @@ class BookList(View):
             publication_date = datetime.strptime(publication_date, "%Y-%m-%d")
         except ValueError:
             return JsonResponse(
-                {"error": "Date format is not correct. Use YYYY-MM-DD format."}, status=400
+                {"error": "Date format is not correct. Use YYYY-MM-DD format."},
+                status=400,
             )
 
         book = Book.objects.create(
-            title=title, author=author, genre=genre, publication_date=publication_date.date()
+            title=title,
+            author=author,
+            genre=genre,
+            publication_date=publication_date.date(),
         )
         data = {
             "id": book.id,
@@ -73,12 +77,12 @@ class BookID(View):
         except Book.DoesNotExist:
             return JsonResponse({"error": "ID is not found"}, status=404)
         data = {
-                "id": book.id,
-                "title": book.title,
-                "author": book.author.name,
-                "genre": book.genre,
-                'publication_date': book.publication_date
-            }
+            "id": book.id,
+            "title": book.title,
+            "author": book.author.name,
+            "genre": book.genre,
+            "publication_date": book.publication_date,
+        }
         return JsonResponse(data, safe=False, status=200)
 
     def delete(self, request, id):
