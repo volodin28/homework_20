@@ -1,4 +1,6 @@
 from django.http import Http404, JsonResponse
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -8,6 +10,7 @@ from .serializers import BookSerializer, AuthorSerializer
 
 
 class BookList(APIView):
+    @method_decorator(cache_page(60 * 5))
     def get(self, request):
         data = Book.objects.all()
         serializer = BookSerializer(data, many=True)
@@ -76,6 +79,7 @@ class BookID(APIView):
 
 
 class AuthorList(APIView):
+    @method_decorator(cache_page(60 * 5))
     def get(self, request):
         data = Author.objects.all()
         serializer = AuthorSerializer(data, many=True)
