@@ -2,7 +2,7 @@ services:
   django-migrations:
     restart: on-failure
     depends_on:
-      - localhost
+      - db
     build: .
     command: python manage.py migrate
 
@@ -15,13 +15,15 @@ services:
     ports:
       - "8000:8000"
 
-  localhost:
+  db:
     image: "postgres"
     restart: always
     environment:
       POSTGRES_PASSWORD: example
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
 
   redis:
     restart: always
