@@ -2,7 +2,7 @@ services:
   django-migrations:
     restart: on-failure
     depends_on:
-      - db
+      - localhost
     build: .
     command: python manage.py migrate
 
@@ -15,7 +15,7 @@ services:
     ports:
       - "8000:8000"
 
-  db:
+  localhost:
     image: "postgres"
     restart: always
     environment:
