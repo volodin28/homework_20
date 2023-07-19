@@ -2,12 +2,14 @@ openapi: 3.0.3
 info:
   title: Library
   description: Your books
-  version: 2.0.0
+  version: 3.0.0
 servers:
-  - url: https://dashboard.heroku.com/apps/homework-20/api/2/
+  - url: https://homework-20-e775289a84b0.herokuapp.com/api/2
 tags:
   - name: book
   - name: author
+  - name: registration
+  - name: get token
 paths:
   /books:
     get:
@@ -25,6 +27,8 @@ paths:
     post:
       tags:
         - book
+      security:
+        - Authentification: []
       summary: Add a book
       requestBody:
         description: Add a new book
@@ -70,6 +74,8 @@ paths:
     put:
       tags:
         - book
+      security:
+        - Authentification: []
       summary: Update book by ID
       parameters:
         - name: id
@@ -99,6 +105,8 @@ paths:
     delete:
       tags:
         - book
+      security:
+        - Authentification: []
       summary: Delete book by id
       description: Delete book by id
       parameters:
@@ -146,6 +154,42 @@ paths:
                 $ref: '#/components/schemas/Author'
         '404':
           description:  Author not found
+  /registration:
+    post:
+      tags:
+        - registration
+      summary: Registration of user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+        required: true
+      responses:
+        '200':
+          description: You have been successfully registered
+        '400':
+          description: Username already exists
+  /token:
+    post:
+      tags:
+        - get token
+      summary: Get auth token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        '400':
+          description: Unable to log in with provided credentials.
 components:
   schemas:
     Book:
@@ -202,3 +246,25 @@ components:
         genre:
           type: string
           example: This field is required.
+    Credentials:
+      properties:
+        username:
+          type: string
+          example: user
+        password:
+          type: string
+          example: example
+    Token:
+      properties:
+        token:
+          type: string
+          example: bdc607371befa2595e5ef3b7e04b3d70829e1ab4
+  securitySchemes:
+    Authentification:
+      type: oauth2
+      description: This API uses OAuth 2 with the implicit grant flow.
+      flows:
+        implicit:
+          authorizationUrl: https://homework-20-e775289a84b0.herokuapp.com/api/2/token
+          scopes:
+            books: post, put, delete
